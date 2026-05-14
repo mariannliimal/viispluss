@@ -1848,12 +1848,65 @@
     }
 
     /* ── MOBILE ── */
+    /* ── HAMBURGER BUTTON ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 300;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0; right: 0; bottom: 0;
+      background: #012624;
+      z-index: 199;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-link {
+      font-size: 1.6rem;
+      font-family: var(--font-heading);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      padding: 10px 0;
+      transition: color 0.2s;
+    }
+    .mobile-menu-link:hover { color: var(--teal-bright); }
+    .mobile-menu-cta { margin-top: 24px; width: 100%; justify-content: center; }
+
     @media (max-width: 900px) {
-      .header { grid-template-columns: 1fr; height: 64px; }
-      .nav-logo-link { border-right: none; padding: 0 24px; }
+      .header { grid-template-columns: 1fr auto; height: 64px; align-items: center; padding: 0 20px; }
+      .nav-logo-link { border-right: none; padding: 0; }
       .nav-logo-img { height: 36px; }
       .nav-links { display: none; }
       .nav-cta-col { display: none; }
+      .nav-hamburger { display: flex; }
       section { padding: 80px 24px; }
       .hero { padding: 0 24px 60px; }
       .strengths { padding-left: 24px; padding-right: 24px; padding-top: 60px; }
@@ -1879,6 +1932,8 @@
       /* portfolio */
       .portfolio { padding: 80px 24px; }
       .portfolio-header { flex-direction: column; gap: 24px; align-items: flex-start; }
+      .portfolio-header .btn-ghost { width: 100%; justify-content: center; }
+      .explore-header { margin-bottom: 32px; }
       .portfolio-grid { grid-template-columns: 1fr; }
       .portfolio-item-a, .portfolio-item-b { grid-column: 1; grid-row: auto; min-height: 260px; }
       .portfolio-bottom { grid-template-columns: 1fr; }
@@ -1912,7 +1967,19 @@
     <div class="nav-cta-col">
       <a href="#kontakt" class="glow-btn"><span class="gb-surface">Küsi pakkumist</span></a>
     </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Ava menüü">
+      <span></span><span></span><span></span>
+    </button>
   </header>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#teenused" class="mobile-menu-link">Teenused</a>
+  <a href="#projektid" class="mobile-menu-link">Projektid</a>
+  <a href="#meist" class="mobile-menu-link">Meist</a>
+  <a href="#kontakt" class="mobile-menu-link">Kontakt</a>
+  <a href="#kontakt" class="glow-btn mobile-menu-cta"><span class="gb-surface">Küsi pakkumist ↗</span></a>
 </div>
 
 <!-- HERO -->
@@ -2315,6 +2382,23 @@
     };
     window.addEventListener('scroll', update, { passive: true });
     update();
+  })();
+
+  // Hamburger mobile menu
+  (function () {
+    const btn  = document.getElementById('navHamburger');
+    const menu = document.getElementById('mobileMenu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+    menu.querySelectorAll('.mobile-menu-link, .mobile-menu-cta').forEach(link => {
+      link.addEventListener('click', () => {
+        btn.classList.remove('open');
+        menu.classList.remove('open');
+      });
+    });
   })();
 
     // Hero cursor-following spotlight
